@@ -1,0 +1,4 @@
+oneup - Online Networked Environment for Unix Products.
+
+Really this is just some [[http://ansible.cc][Ansible]] files for installing packages from
+source in a manner that is compatible with [[http://www.fnal.gov/docs/products/ups/][UPS]].
