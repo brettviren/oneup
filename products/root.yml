@@ -1,0 +1,17 @@
+---
+# A playbook to build ROOT
+
+- hosts: all
+  gather_facts: no
+  vars:
+    version: ${products.root.version}
+    srcdir: root
+    tarball: root_v${version}.source.tar.gz
+    url: ftp://root.cern.ch/root/${tarball}
+
+  tasks:
+    
+    - include: download.yml pkg=root
+
+
+

@@ -1,0 +1,17 @@
+---
+# Un-tar a file
+#
+# Takes these variables:
+#
+# products - data struct of all packages
+# pkg - name of package in products data struct
+# build_path - directory to run the tar command from
+# source_path - directory that should be made from the untaring
+# tar_opts - options for running tar
+# tar_file - full path to tar file
+
+- name: untar package $pkg with opts $tar_opts
+  command: tar ${tar_opts} ${tar_file} chdir=${build_path} creates=${source_path}
+  when_set: ${products.${pkg}}
+  tags:
+    - untar

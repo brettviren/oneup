@@ -1,0 +1,35 @@
+---
+# A playbook to build cppunit
+
+- hosts: all
+  vars:
+    pkg: cppunit
+    srcdir: ${pkg}-${version}
+    tarball: ${srcdir}.tar.gz
+    url: http://cgit.freedesktop.org/libreoffice/${pkg}/snapshot/${tarball}
+
+  tasks:
+    
+    - include: directories.yml
+
+    - include: download.yml
+
+    - include: untar.yml tar_opts=-xzf
+
+    - include: configure.yml run_autogen=yes 
+
+
+
+    # - debug: msg="srcdir = $source_cache/${cppunit.srcdir}"
+
+    # - debug: msg="tarball = ${cppunit.tarball}"
+
+    # - debug: msg="url = ${cppunit.url}"
+
+
+
+    # - name: download cppunit source package
+    #   get_url: dest=$source_cache/${suite.products.cppunit.srcdir}
+    #            url=${suite.products.cppunit.url}
+
+

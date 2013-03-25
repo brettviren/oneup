@@ -1,0 +1,26 @@
+---
+# Variables for host "foo".  (host is really compile host plus the software suite)
+
+ansible_ssh_host: localhost
+
+source_cache: /home/bv/work/lbne/fart/source_cache
+install_base: /home/bv/work/lbne/fart/install_base
+build_base: /home/bv/work/lbne/fart/build_base
+
+# UPS flavor for this suite
+#flavor: ${ansible_system}+${ansible_distribution}${ansible_distribution_version}
+
+
+qualifiers:
+  - debug
+
+products:
+  cppunit:
+    version: 1.12.1
+    configure_opts: ""
+  python:
+    version: 2.7.3
+    configure_opts: "--enable-shared"
+#  root:
+#    version: 5.34.05
+#    configure_opts: ""

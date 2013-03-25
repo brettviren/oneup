@@ -1,0 +1,21 @@
+---
+# download a file from a url.
+#
+# Requires these variables to be set:
+#
+# products - a data structure of all packages in the suite
+# pkg - the name of the package in the $products list
+# url - the URL of the file to download
+# tar_file - full path to the tar file on the local system
+
+- name: chirp download for package $pkg
+  debug: msg="dest=${tar_file} url=${url}"
+  when_set: ${products.${pkg}}
+  tags:
+    - download
+
+- name: download source package $pkg
+  get_url: dest=${tar_file}  url=${url}
+  when_set: ${products.${pkg}}
+  tags:
+    - download

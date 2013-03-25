@@ -1,0 +1,16 @@
+---
+- hosts: all
+  gather_facts: no
+  vars:
+    srcdir: cppunit-${products.cppunit.version}
+    tarball: ${srcdir}.tar.gz
+    url: http://cgit.freedesktop.org/libreoffice/cppunit/snapshot/${tarball}
+
+  tasks:
+    
+    - debug: msg="srcdir = $source_cache/${srcdir}"
+
+    - debug: msg="tarball = ${tarball}"
+
+    - debug: msg="url = ${url}"
+

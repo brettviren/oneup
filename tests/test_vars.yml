@@ -1,0 +1,18 @@
+---
+# a test products/ file
+# It must define "pkg", "srcdir" and "tarball"
+
+- hosts: all
+  vars:
+    pkg: cppunit
+    srcdir: ${pkg}-${version}
+    tarball: ${srcdir}.tar.gz
+
+  tasks:
+    - debug: msg="flavor=${flavor}"
+    - debug: msg="version=${version}"
+    - debug: msg="unique=${unique}"
+    - debug: msg="tar_file = ${tar_file}"
+    - debug: msg="build_path = ${build_path}"
+    - debug: msg="source_path = ${source_path}"
+    - debug: msg="install_path = ${install_path}"

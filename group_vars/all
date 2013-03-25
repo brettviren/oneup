@@ -1,0 +1,21 @@
+---
+# Define variables for a product.  
+#
+# They are based on variables defined else where:
+#
+# The host_vars/ file must define: "products"
+#
+# The products/ file must define "pkg", "srcdir" and "tarball".  
+#
+# In addition, some variables are gathered as facts.
+
+flavor: ${ansible_system}+${ansible_distribution}${ansible_distribution_version}
+version: ${products.${pkg}.version}
+unique: ${version}/${flavor}
+
+tar_file: ${source_cache}/${tarball}
+build_path: ${build_base}/${pkg}/${unique}
+source_path: ${build_path}/${srcdir}
+install_path: ${install_base}/${pkg}/${unique}
+
+
