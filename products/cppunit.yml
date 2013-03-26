@@ -16,20 +16,7 @@
 
     - include: untar.yml tar_opts=-xzf
 
-    - include: configure.yml run_autogen=yes 
+    - include: configure.yml bootstrap=./autogen.sh
 
-
-
-    # - debug: msg="srcdir = $source_cache/${cppunit.srcdir}"
-
-    # - debug: msg="tarball = ${cppunit.tarball}"
-
-    # - debug: msg="url = ${cppunit.url}"
-
-
-
-    # - name: download cppunit source package
-    #   get_url: dest=$source_cache/${suite.products.cppunit.srcdir}
-    #            url=${suite.products.cppunit.url}
-
+    - include: make.yml installs=lib/libcppunit.a
 

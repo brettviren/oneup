@@ -5,10 +5,10 @@
   tags:
     - directories
 
-- file: state=directory path=$source_path
-  when_set: $source_path
-  tags:
-    - directories
+# - file: state=directory path=$source_path
+#   when_set: $source_path
+#   tags:
+#     - directories
 
 - file: state=directory path=$install_path
   when_set: $install_path

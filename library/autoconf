@@ -1,0 +1,85 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+DOCUMENTATION = '''
+---
+module: autoconf
+short_description: Operate on a source package configured through C(autoconf).
+description:
+   - Run the C(autoconf) C(configure) script in a source directory and 
+     optionally a "bootstrap" script.
+options: {}
+examples:
+   - code: ansible autoconf -m ping chdir=/src/dir bootstrap=./autogen.sh
+     description: Run bootstrap script then C(configure) in C(/src/dir).
+author: Brett Viren
+'''
+
+import os
+
+# include magic from lib/ansible/module_common.py
+#<<INCLUDE_ANSIBLE_MODULE_COMMON>>
+
+def main():
+    
+    mod = AnsibleModule(
+        argument_spec = dict(
+            bootstrap = dict(required=False),
+            chdir = dict(required=True),
+            creates = dict(required=False),
+            qualifiers = dict(required=False, default=[]),
+            configure = dict(required=False, default="./configure"),
+            prefix = dict(required=True),
+            opts = dict(required=False, default=''),
+            )
+        )
+    p = mod.params
+
+    if p['chdir']:
+        os.chdir(os.path.expanduser(p['chdir']))
+    
+    if p['creates']:            # imitate command module
+        path = os.path.expanduser(p['creates'])
+        if os.path.exists(path):
+            mod.exit_json(
+                cmd=p['configure'],
+                stdout="skipped, since %s exists" % path, 
+                skipped=True,
+                changed=False,
+                stderr=False,
+                rc=0
+                )
+
+    # Use qualifiers to set standard FLAGS env. vars.
+    quals = [x.strip().lower() for x in p['qualifiers'].split(",")]
+    flags = []
+    if 'debug' in quals: flags.append('-g') 
+    if 'opt' in quals: flags.append('-O')
+    if flags:
+        for var in ['CFLAGS','CXXFLAGS']:
+            os.environ[var] = ' '.join(flags)
+            continue
+        pass
+    
+    boostrap = p['bootstrap'].strip()
+    if boostrap:
+        rc, out, err = mod.run_command(boostrap)
+        if rc:                  # error
+            mod.exit_json(cmd = bootstrap, rc = rc,
+                          stdout = out or '', stderr = err or '')
+            pass
+        pass
+    
+
+    cmd = "%(configure)s --prefix=%(prefix)s %(opts)s" % p
+    rc, out, err = mod.run_command(cmd)
+    mod.exit_json(
+        cmd     = cmd,
+        stdout  = out or '',
+        stderr  = err or '',
+        rc      = rc,
+        changed = True,
+    )
+
+
+main()
+

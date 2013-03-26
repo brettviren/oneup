@@ -9,13 +9,25 @@
 #
 # In addition, some variables are gathered as facts.
 
+# A platform specific label
 flavor: ${ansible_system}+${ansible_distribution}${ansible_distribution_version}
+
+# The package's native version string 
 version: ${products.${pkg}.version}
+
+# A uniquely named sub-directory based on platform and package version
 unique: ${version}/${flavor}
 
+# The full path to the source tarball
 tar_file: ${source_cache}/${tarball}
+
+# The full path to the base of the package's build area
 build_path: ${build_base}/${pkg}/${unique}
+
+# The full path to the base of the package's unpacked source 
 source_path: ${build_path}/${srcdir}
+
+# The full path to the base where the compiled package is installed
 install_path: ${install_base}/${pkg}/${unique}
 
 

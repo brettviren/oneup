@@ -4,16 +4,9 @@
 - hosts: all
   vars:
     pkg: python
-    version: ${products.${pkg}.version}
     srcdir: Python-${version}
     tarball: ${srcdir}.tar.bz2
-    unique: ${version}/${flavor}
-
     url: http://www.python.org/ftp/python/${version}/${tarball}
-    tar_file: ${source_cache}/${tarball}
-    build_path: ${build_base}/${pkg}/${unique}
-    source_path: ${build_path}/${srcdir}
-    install_path: ${install_base}/${pkg}/${unique}
 
   tasks:
     
@@ -24,3 +17,6 @@
     - include: untar.yml tar_opts=-xjf
 
     - include: configure.yml
+
+    - include: make.yml installs=bin/python
+
