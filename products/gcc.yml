@@ -1,0 +1,20 @@
+---
+# Build GCC
+- hosts: all
+  vars:
+    pkg: gcc
+    srcdir: gcc-${version}
+    tarball: ${srcdir}.tar.bz2
+    url: http://www.netgull.com/gcc/releases/${srcdir}/${tarball}
+
+  tasks:
+    
+    - include: $top/tasks/directories.yml
+
+    - include: $top/tasks/download.yml
+
+    - include: $top/tasks/untar.yml tar_opts=-xjf
+
+    - include: $top/tasks/configure.yml 
+
+    - include: $top/tasks/make.yml installs=lib/libcppunit.a

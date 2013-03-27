@@ -1,0 +1,29 @@
+---
+# Build GMP (for GCC)
+
+- hosts: all
+  vars:
+    pkg: gmp
+    srcdir: ${pkg}-${version}
+    tarball: ${srcdir}.tar.bz2
+    url: ftp://ftp.gmplib.org/pub/${srcdir}/${tarball}
+    gmp_prefix: ${install_path}
+
+    # override
+    qualifiers: ""
+
+  tasks:
+    
+    - include: $top/tasks/directories.yml
+
+    - include: $top/tasks/download.yml
+
+    - include: $top/tasks/untar.yml tar_opts=-xjf
+
+    - include: $top/tasks/configure.yml
+
+    - include: $top/tasks/make.yml 
+
+
+
+

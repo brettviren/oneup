@@ -1,0 +1,23 @@
+---
+# Tasks to run autoconf's configure and maybe first a bootrap script to make it.
+
+- name: chirp configure
+  debug: msg="configure $pkg in $build_path"
+  tags:
+    - configure
+
+- name: maybe run a bootstrap script for package $pkg
+  command: $bootstrap chdir=$source_path creates=configure
+  when_set: $bootstrap
+  tags:
+    - configure
+
+- name: run configure for package $pkg
+  autoconf: chdir=${build_path} 
+            configure=${source_path}/configure
+            creates=config.status
+            prefix=${install_path}
+            opts="${products.${pkg}.configure_opts}"
+            qualifiers=$qualifiers
+  tags:
+    - configure

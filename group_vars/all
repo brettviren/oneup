@@ -1,4 +1,4 @@
----
+--- # -*- yaml -*- # ---
 # Define variables for a product.  
 #
 # They are based on variables defined else where:
@@ -21,13 +21,18 @@ unique: ${version}/${flavor}
 # The full path to the source tarball
 tar_file: ${source_cache}/${tarball}
 
+# Intermediate directory holding source and build areas
+pkg_build_base: ${build_base}/${pkg}/${unique}
+
 # The full path to the base of the package's build area
-build_path: ${build_base}/${pkg}/${unique}
+build_path: ${pkg_build_base}/build
 
 # The full path to the base of the package's unpacked source 
-source_path: ${build_path}/${srcdir}
+source_path: ${pkg_build_base}/${srcdir}
 
 # The full path to the base where the compiled package is installed
 install_path: ${install_base}/${pkg}/${unique}
+
+
 
 

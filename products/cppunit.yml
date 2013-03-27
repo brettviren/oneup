@@ -10,13 +10,13 @@
 
   tasks:
     
-    - include: directories.yml
+    - include: $top/tasks/directories.yml
 
-    - include: download.yml
+    - include: $top/tasks/download.yml
 
-    - include: untar.yml tar_opts=-xzf
+    - include: $top/tasks/untar.yml tar_opts=-xzf
 
-    - include: configure.yml bootstrap=./autogen.sh
+    - include: $top/tasks/configure.yml bootstrap=./autogen.sh
 
-    - include: make.yml installs=lib/libcppunit.a
+    - include: $top/tasks/make.yml installs=lib/libcppunit.a
 

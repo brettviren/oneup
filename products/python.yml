@@ -10,13 +10,13 @@
 
   tasks:
     
-    - include: directories.yml
+    - include: $top/tasks/directories.yml
 
-    - include: download.yml 
+    - include: $top/tasks/download.yml 
 
-    - include: untar.yml tar_opts=-xjf
+    - include: $top/tasks/untar.yml tar_opts=-xjf
 
-    - include: configure.yml
+    - include: $top/tasks/configure.yml
 
-    - include: make.yml installs=bin/python
+    - include: $top/tasks/make.yml installs=bin/python
 

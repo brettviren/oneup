@@ -1,4 +1,4 @@
----
+--- # -*- yaml -*- # ---
 
 source_cache: /home/bv/work/lbne/fart/source_cache
 install_base: /home/bv/work/lbne/fart/install_base

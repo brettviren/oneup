@@ -1,0 +1,9 @@
+#!/bin/bash
+
+top="$(readlink -f $(dirname $BASH_SOURCE))"
+source $top/oneup-setup.sh
+oneup "$@"
+
+
+
+

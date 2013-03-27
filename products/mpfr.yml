@@ -1,0 +1,31 @@
+---
+# A playbook to build MPFR
+
+- hosts: all
+  vars:
+    pkg: mpfr
+    srcdir: ${pkg}-${version}
+    tarball: ${srcdir}.tar.bz2
+    url: http://www.mpfr.org/mpfr-current/${tarball}
+
+    # must match what is in group_vars/all!
+    gmp_prefix: ${install_base}/gmp/${products.gmp.version}/${flavor}
+
+  tasks:
+    
+    - debug: msg="install_path=$install_path gmp_prefix=$gmp_prefix mpfr_prefix=${mpfr_prefix}"
+      tags:
+        - spew
+
+    - include: $top/tasks/directories.yml
+
+    - include: $top/tasks/download.yml
+
+    - include: $top/tasks/untar.yml tar_opts=-xjf
+
+    - include: $top/tasks/configure.yml 
+
+    - include: $top/tasks/make.yml 
+
+
+

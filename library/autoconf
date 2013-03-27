@@ -5,12 +5,11 @@ DOCUMENTATION = '''
 module: autoconf
 short_description: Operate on a source package configured through C(autoconf).
 description:
-   - Run the C(autoconf) C(configure) script in a source directory and 
-     optionally a "bootstrap" script.
+   - Run the C(autoconf) C(configure) script in a source directory 
 options: {}
 examples:
-   - code: ansible autoconf -m ping chdir=/src/dir bootstrap=./autogen.sh
-     description: Run bootstrap script then C(configure) in C(/src/dir).
+   - code: ansible autoconf -m autoconf chdir=/src/dir 
+     description: Run C(configure) in C(/src/dir).
 author: Brett Viren
 '''
 
@@ -23,7 +22,6 @@ def main():
     
     mod = AnsibleModule(
         argument_spec = dict(
-            bootstrap = dict(required=False),
             chdir = dict(required=True),
             creates = dict(required=False),
             qualifiers = dict(required=False, default=[]),
@@ -60,16 +58,6 @@ def main():
             continue
         pass
     
-    boostrap = p['bootstrap'].strip()
-    if boostrap:
-        rc, out, err = mod.run_command(boostrap)
-        if rc:                  # error
-            mod.exit_json(cmd = bootstrap, rc = rc,
-                          stdout = out or '', stderr = err or '')
-            pass
-        pass
-    
-
     cmd = "%(configure)s --prefix=%(prefix)s %(opts)s" % p
     rc, out, err = mod.run_command(cmd)
     mod.exit_json(

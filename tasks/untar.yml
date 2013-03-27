@@ -11,7 +11,7 @@
 # tar_file - full path to tar file
 
 - name: untar package $pkg with opts $tar_opts
-  command: tar ${tar_opts} ${tar_file} chdir=${build_path} creates=${source_path}
+  command: tar ${tar_opts} ${tar_file} chdir=${pkg_build_base} creates=${source_path}
   when_set: ${products.${pkg}}
   tags:
     - untar

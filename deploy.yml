@@ -2,19 +2,13 @@
 
 - hosts: all
   tasks:
-    - file: path=$source_cache state=directory
-    - file: path=$install_base state=directory
-    - file: path=$build_base   state=directory
+    - debug: msg="spew $top"
 
-    - debug: msg="SYSTEM=${ansible_system}"
-    - debug: msg="OS FAMILY=${ansible_os_family}"
-    - debug: msg="DISTRIBUTION VERSION=${ansible_distribution}"
-    - debug: msg="DISTRIBUTION VERSION=${ansible_distribution_version}"
-
-
-- include: products/cppunit.yml
-- include: products/python.yml
-- include: products/root.yml
+- include: products/gmp.yml
+- include: products/mpfr.yml
+#- include: products/cppunit.yml
+#- include: products/python.yml
+#- include: products/root.yml
   
   
   

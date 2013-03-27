@@ -1,4 +1,4 @@
----
+--- # -*- yaml -*- # ---
 # Variables for host "foo".  (host is really compile host plus the software suite)
 
 ansible_ssh_host: localhost
@@ -15,12 +15,39 @@ qualifiers:
   - debug
 
 products:
+  gmp:
+    version: 5.1.1
+    configure_opts: ""
+
+  mpfr:
+    version: 3.1.2
+    configure_opts: "--with-gmp=${gmp_prefix}"
+
+  mpc:
+    version: 1.0
+    configure_opts: ""
+
+  isl:
+    version:
+    configure_opts: ""
+
+  cloog:
+    version:
+    configure_opts: ""
+
+
+  gcc:
+    version: 4.7.2
+    configure_opts: "--disable-shared --enable-threads=posix --enable-languages=c,c++,fortran"
+    
   cppunit:
     version: 1.12.1
     configure_opts: ""
+
   python:
     version: 2.7.3
     configure_opts: "--enable-shared"
+
 #  root:
 #    version: 5.34.05
 #    configure_opts: ""
