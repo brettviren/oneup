@@ -7,22 +7,22 @@
     srcdir: ${pkg}-${version}
     tarball: ${srcdir}.tar.bz2
     url: ftp://ftp.gmplib.org/pub/${srcdir}/${tarball}
-    gmp_prefix: ${install_path}
+    configure_opts: ${products.${pkg}.configure_opts}
 
     # override
     qualifiers: ""
 
   tasks:
     
-    - include: $top/tasks/directories.yml
+    - include: $top/tasks/directories.yml 
 
     - include: $top/tasks/download.yml
 
     - include: $top/tasks/untar.yml tar_opts=-xjf
 
-    - include: $top/tasks/configure.yml
+    - include: $top/tasks/configure.yml 
 
-    - include: $top/tasks/make.yml 
+    - include: $top/tasks/make.yml installs=lib/libgmp.a
 
 
 

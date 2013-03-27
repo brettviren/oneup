@@ -1,17 +1,12 @@
 ---
 
-- file: state=directory path=$build_path
-  when_set: $build_path
+- file: state=directory path=$pkg_build_dir
+  when_set: $pkg_build_dir
   tags:
     - directories
 
-# - file: state=directory path=$source_path
-#   when_set: $source_path
-#   tags:
-#     - directories
-
-- file: state=directory path=$install_path
-  when_set: $install_path
+- file: state=directory path=$pkg_install_dir
+  when_set: $pkg_install_dir
   tags:
     - directories
 

@@ -2,6 +2,6 @@
 # Need to pass in "makes" and "installs" variables
 
 - name: Run the make install command in the build directory of package ${pkg}
-  command: make install chdir="${build_path}" creates="${install_path}/${installs}"
+  command: make install chdir="${pkg_build_dir}" creates="${pkg_install_dir}/${installs}"
   tags:
     - install

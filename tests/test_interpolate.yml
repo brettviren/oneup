@@ -1,0 +1,16 @@
+---
+
+- hosts: all
+  vars:
+    pkg: gcc
+    var1: ${res1.result}
+    var2: ${res2.result}
+  tasks:
+    - local_action: interpolate pattern="--with-pkg1-dir=%(a)s/%(b)s/%(c)s" a=/base b=mid c=leaf
+      register: res1
+
+    - local_action: interpolate pattern="%(a)s/%(b)s/%(c)s" a=/path b=to c=nowhere
+      register: res2
+
+    - debug: msg="result is ${products.${pkg}.configure_opts} and ${res1.result} and ${res2.result}"
+    - debug: msg="res1 = $var1 res2=$var2"

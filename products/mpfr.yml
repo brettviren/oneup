@@ -7,15 +7,24 @@
     srcdir: ${pkg}-${version}
     tarball: ${srcdir}.tar.bz2
     url: http://www.mpfr.org/mpfr-current/${tarball}
-
-    # must match what is in group_vars/all!
-    gmp_prefix: ${install_base}/gmp/${products.gmp.version}/${flavor}
+    configure_opts: ${products.${pkg}.configure_opts} ${gmp_dep.result}
 
   tasks:
     
-    - debug: msg="install_path=$install_path gmp_prefix=$gmp_prefix mpfr_prefix=${mpfr_prefix}"
+    - local_action: interpolate 
+                    pattern="--with-%(pkg)s=$pkg_install_pattern" 
+                    pkg=gmp version=${products.gmp.version}
+      register: gmp_dep
       tags:
-        - spew
+        - configure
+
+    # - local_action: interpolate pattern=$pkg_build_pattern pkg=$pkg version=$version
+    #   register: res2
+
+
+    - debug: msg="configure_opt = ${configure_opts}"
+      tags:
+        - configure
 
     - include: $top/tasks/directories.yml
 

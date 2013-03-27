@@ -1,0 +1,20 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import json
+import sys
+
+args_file = sys.argv[1]
+args_data = file(args_file).read()
+
+
+data = {}
+for part in args_data.split():
+    k,v = part.split("=",1)
+    data[k] = v
+
+pattern = data['pattern']
+del(data['pattern'])
+
+result = pattern%data
+
+print json.dumps({'result': result})

@@ -21,7 +21,7 @@ products:
 
   mpfr:
     version: 3.1.2
-    configure_opts: "--with-gmp=${gmp_prefix}"
+    configure_opts: ""
 
   mpc:
     version: 1.0
