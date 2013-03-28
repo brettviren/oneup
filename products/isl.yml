@@ -1,15 +1,15 @@
 ---
-# A playbook to build MPFR
+# A playbook to build isl
 
 - hosts: all
   vars:
-    pkg: mpfr
+    pkg: isl
     srcdir: ${pkg}-${version}
     tarball: ${srcdir}.tar.bz2
-    url: http://www.mpfr.org/mpfr-current/${tarball}
+    url: ftp://gcc.gnu.org/pub/gcc/infrastructure/$tarball
 
   tasks:
-
+    
     - include: $top/tasks/directories.yml
 
     - include: $top/tasks/download.yml
@@ -19,9 +19,7 @@
     - include: $top/tasks/configure.yml 
       vars:
         gmp_prefix: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"gmp"})
-        opts: "--with-out-java --with-gmp=${gmp_prefix}"
+        opts: "--with-gmp-prefix=${gmp_prefix}"
 
-    - include: $top/tasks/make.yml installs=lib/libmpfr.a
-
-
+    - include: $top/tasks/make.yml installs=lib/libisl.a
 

@@ -1,16 +1,19 @@
 ---
-# A playbook to build MPFR
+# Build PPL (for GCC)
+# http://stackoverflow.com/questions/13577436/gcc-4-7-2-requires-ppl
 
 - hosts: all
   vars:
-    pkg: mpfr
+    pkg: ppl
     srcdir: ${pkg}-${version}
     tarball: ${srcdir}.tar.bz2
-    url: http://www.mpfr.org/mpfr-current/${tarball}
+    url: http://bugseng.com/products/ppl/download/ftp/releases/${version}/$tarball
+    # override
+    qualifiers: ""
 
   tasks:
-
-    - include: $top/tasks/directories.yml
+    
+    - include: $top/tasks/directories.yml 
 
     - include: $top/tasks/download.yml
 
@@ -21,7 +24,8 @@
         gmp_prefix: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"gmp"})
         opts: "--with-out-java --with-gmp=${gmp_prefix}"
 
-    - include: $top/tasks/make.yml installs=lib/libmpfr.a
+    - include: $top/tasks/make.yml installs=lib/libppl.a
+
 
 
 

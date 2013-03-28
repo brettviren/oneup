@@ -3,12 +3,22 @@
 
 ansible_ssh_host: localhost
 
+# Directory locations
 source_cache: /home/bv/work/lbne/fart/source_cache
 install_base: /home/bv/work/lbne/fart/install_base
 build_base: /home/bv/work/lbne/fart/build_base
 
-# UPS flavor for this suite
-#flavor: ${ansible_system}+${ansible_distribution}${ansible_distribution_version}
+# needed to download from BNL wire
+# BNL wireless only needs FTP but the others won't hurt
+# Must turn off if no proxy needed!
+proxy_env_bnl: 
+  FTP_PROXY: http://192.168.1.165:3128/
+  ftp_proxy: http://192.168.1.165:3128/
+  HTTP_PROXY: http://192.168.1.165:3128/
+  http_proxy: http://192.168.1.165:3128/
+  HTTPS_PROXY: http://192.168.1.165:3128/
+  https_proxy: http://192.168.1.165:3128/
+proxy_env: $proxy_env_bnl
 
 
 qualifiers:
@@ -16,38 +26,31 @@ qualifiers:
 
 products:
   gmp:
-    version: 5.1.1
-    configure_opts: ""
+    version: 5.0.5
+
+  ppl:
+    version: 0.12.1
 
   mpfr:
     version: 3.1.2
-    configure_opts: ""
 
   mpc:
-    version: 1.0
-    configure_opts: ""
+    version: 0.9
 
   isl:
-    version:
-    configure_opts: ""
+    version: 0.11.1
 
   cloog:
-    version:
-    configure_opts: ""
-
+    version: 0.16.2
 
   gcc:
-    version: 4.7.2
-    configure_opts: "--disable-shared --enable-threads=posix --enable-languages=c,c++,fortran"
+    version: 4.7.1
     
   cppunit:
     version: 1.12.1
-    configure_opts: ""
 
   python:
     version: 2.7.3
-    configure_opts: "--enable-shared"
 
 #  root:
 #    version: 5.34.05
-#    configure_opts: ""

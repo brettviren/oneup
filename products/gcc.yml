@@ -1,14 +1,37 @@
 ---
-# Build GCC
+# A playbook to build GCC
+
 - hosts: all
   vars:
     pkg: gcc
-    srcdir: gcc-${version}
+    srcdir: ${pkg}-${version}
     tarball: ${srcdir}.tar.bz2
     url: http://www.netgull.com/gcc/releases/${srcdir}/${tarball}
+    prefix:
+        gmp: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"gmp"})
+        mpfr: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"mpfr"})
+        mpc: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"mpc"})
+        isl: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"isl"})
+        ppl: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"ppl"})
+        cloog: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"cloog"})
+
+    ld_lib_path: $JOIN(':' ${prefix.gmp}/lib, ${prefix.mpfr}/lib, ${prefix.mpc}/lib, ${prefix.isl}/lib, ${prefix.ppl}/lib, ${prefix.cloog}/lib)
+
+    make_env:
+      LD_LIBRARY_PATH: $ld_lib_path
+      LIBRARY_PATH: "/usr/lib/${gccma.stdout}"
+      C_INCLUDE_PATH: "/usr/include/${gccma.stdout}"
+      CPLUS_INCLUDE_PATH: "/usr/include/${gccma.stdout}"
+      CPATH: "/usr/include/${gccma.stdout}"
+
 
   tasks:
     
+    - shell: gcc -print-multiarch
+      register: gccma
+    
+    - debug: msg="GCC multiarch is ${gccma.stdout}"
+
     - include: $top/tasks/directories.yml
 
     - include: $top/tasks/download.yml
@@ -16,5 +39,24 @@
     - include: $top/tasks/untar.yml tar_opts=-xjf
 
     - include: $top/tasks/configure.yml 
+      vars:
+        opts: "--with-gmp=${prefix.gmp} --with-mpc=${prefix.mpc} --with-mpfr=${prefix.mpfr} --with-ppl=${prefix.ppl} --with-cloog=${prefix.cloog} --enable-cloog-backend=isl --with-gnu-as --with-gnu-ld --disable-libgc"
 
-    - include: $top/tasks/make.yml installs=lib/libcppunit.a
+    - include: $top/tasks/dumpenv.yml
+
+    - include: $top/tasks/make.yml makes=gcc/g++  installs=bin/g++
+
+# Need to set LD_LIBRARY_PATH with the locations of the installed prereqs
+#
+# export LD_LIBRARY_PATH=/home/bv/work/lbne/fart/install_base/cloog/0.16.2/Linux+Debian7.0/lib:/home/bv/work/lbne/fart/install_base/gmp/5.0.5/Linux+Debian7.0/lib:/home/bv/work/lbne/fart/install_base/isl/0.11.1/Linux+Debian7.0/lib:/home/bv/work/lbne/fart/install_base/mpc/0.9/Linux+Debian7.0/lib:/home/bv/work/lbne/fart/install_base/mpfr/3.1.2/Linux+Debian7.0/lib:/home/bv/work/lbne/fart/install_base/ppl/0.12.1/Linux+Debian7.0/lib
+
+# Need to set to handle multilib
+#
+# export LIBRARY_PATH=/usr/lib/i386-linux-gnu
+# export C_INCLUDE_PATH=/usr/include/i386-linux-gnu
+# export CPLUS_INCLUDE_PATH=/usr/include/i386-linux-gnu
+
+# http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=682678
+# export LIBRARY_PATH=/usr/lib/$(gcc -print-multiarch)
+# export CPATH=/usr/include/$(gcc -print-multiarch)
+

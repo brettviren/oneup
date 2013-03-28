@@ -17,5 +17,6 @@
 - name: download source package $pkg
   get_url: dest=${tar_file}  url=${url}
   when_set: ${products.${pkg}}
+  environment: $proxy_env
   tags:
     - download

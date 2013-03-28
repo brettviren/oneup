@@ -1,0 +1,52 @@
+---
+- hosts: all
+  vars:
+    var1: xxx
+    var2: yyy
+    var3: zzz
+    meld: $LOOKUP(template,$top/tests/foo.j2)
+    nest:
+      a: 10
+      b: 20
+      c: 30
+    diff: $TEMPLATE($top/tests/bar.j2 {"ind":"a"})
+
+    abc:
+      - a
+      - b
+      - c
+    xyz:
+      - x
+      - y
+      - z
+    joined: $JOIN(':' $abc $xyz) 
+    gmp_prefix: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"gmp"})
+
+    prefix:
+        gmp: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"gmp"})
+        mpfr: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"mpfr"})
+        mpc: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"mpc"})
+        isl: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"isl"})
+        ppl: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"ppl"})
+        cloog: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"cloog"})
+
+    ld_lib_path: $JOIN(':' ${prefix.gmp}/lib, ${prefix.mpfr}/lib, ${prefix.mpc}/lib, ${prefix.isl}/lib, ${prefix.ppl}/lib, ${prefix.cloog}/lib)
+
+    make_env:
+      LD_LIBRARY_PATH: $ld_lib_path
+
+  tasks:
+
+    - debug: msg="var1=${var1} var2=${var2} var3=${var3} meld=${meld}"
+
+    - debug: msg="a=${nest.a} b=${nest.b} c=${nest.c} diff=${diff}"
+
+    - debug: msg="gmp_prefix=$gmp_prefix"
+
+    - debug: msg="joined=$joined"
+
+    - debug: msg="prefixes = ${prefix.gmp}/lib ${prefix.mpc}/lib"
+
+    - debug: msg="ld_lib_path = $ld_lib_path"
+
+    - debug: msg="make_env = $make_env"

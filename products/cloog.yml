@@ -1,12 +1,12 @@
 ---
-# A playbook to build mpc
+# A playbook to build CLooG
 
 - hosts: all
   vars:
-    pkg: mpc
+    pkg: cloog
     srcdir: ${pkg}-${version}
     tarball: ${srcdir}.tar.gz
-    url: http://www.multiprecision.org/mpc/download/${tarball}
+    url: ftp://gcc.gnu.org/pub/gcc/infrastructure/$tarball
 
   tasks:
     
@@ -19,8 +19,8 @@
     - include: $top/tasks/configure.yml 
       vars:
         gmp_prefix: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"gmp"})
-        mpfr_prefix: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"mpfr"})
-        opts: "--with-gmp=${gmp_prefix} --with-mpfr=${mpfr_prefix}"
+        ppl_prefix: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"ppl"})
+        opts: "--with-gmp-dir=${gmp_prefix} --with-ppl=${ppl_prefix}"
 
-    - include: $top/tasks/make.yml installs=lib/libmpc.a
+    - include: $top/tasks/make.yml installs=libcloog.a
 

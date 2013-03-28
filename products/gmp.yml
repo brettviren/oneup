@@ -7,9 +7,8 @@
     srcdir: ${pkg}-${version}
     tarball: ${srcdir}.tar.bz2
     url: ftp://ftp.gmplib.org/pub/${srcdir}/${tarball}
-    configure_opts: ${products.${pkg}.configure_opts}
 
-    # override
+    # override because gmp doesn't like having CFLAGS set
     qualifiers: ""
 
   tasks:
@@ -21,6 +20,8 @@
     - include: $top/tasks/untar.yml tar_opts=-xjf
 
     - include: $top/tasks/configure.yml 
+      vars:
+        configure_opts: "--enable-cxx"
 
     - include: $top/tasks/make.yml installs=lib/libgmp.a
 

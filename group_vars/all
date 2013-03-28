@@ -20,21 +20,37 @@ version: ${products.${pkg}.version}
 tar_file: ${source_cache}/${tarball}
 
 # The temporary area where source is unpacked and package is built
-pkg_temp_dir: "${build_base}/${pkg}/${version}/${flavor}"
+#pkg_temp_dir: "${build_base}/${pkg}/${version}/${flavor}"
+pkg_temp_dir: $TEMPLATE($top/templates/pkg_temp_dir.j2)
 
 # The unpacked source directory
-pkg_source_dir: "${pkg_temp_dir}/${srcdir}"
+#pkg_source_dir: "${pkg_temp_dir}/${srcdir}"
+pkg_source_dir: $TEMPLATE($top/templates/pkg_source_dir.j2)
 
 # Directory in which to build the package
-pkg_build_dir: "${pkg_temp_dir}/build"
+#pkg_build_dir: "${pkg_temp_dir}/build"
+pkg_build_dir: $TEMPLATE($top/templates/pkg_build_dir.j2)
 
 # The installation directory for the current package.  
-pkg_install_dir:     "${install_base}/${pkg}/${version}/${flavor}"
+# pkg_install_dir:     "${install_base}/${pkg}/${version}/${flavor}"
+pkg_install_dir: $TEMPLATE($top/templates/pkg_install_dir.j2)
 
 # The installation directory as an interpolatable pattern
-pkg_install_pattern: "${install_base}/%(pkg)s/%(version)s/${flavor}"
+# pkg_install_pattern: "${install_base}/%(pkg)s/%(version)s/${flavor}"
 
+# Set default values for task arguments
 
+# Set some number of qualifers in the group_vars or host_vars file 
+qualifiers: []
+
+# Set an environment dictionary for the configure.yml tasks
+configure_env: {}
+
+# Set an environment dictionary for the make.yml tasks
+make_env: {}
+
+# Used to set tar options
+tar_opts: ""
 
 
 

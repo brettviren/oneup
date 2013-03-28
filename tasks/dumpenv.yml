@@ -1,0 +1,6 @@
+- debug: msg="Make Env for package $pkg is $make_env"
+  environment: $make_env    
+  tags:
+    - spew
+
+  

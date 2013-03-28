@@ -2,7 +2,7 @@
 # Tasks to run autoconf's configure and maybe first a bootrap script to make it.
 
 - name: chirp configure
-  debug: msg="configure $pkg in $pkg_build_dir with $configure_opts"
+  debug: msg="configure $pkg in $pkg_build_dir with $configure_opts in $pkg_source_dir and $qualifiers"
   tags:
     - configure
 
@@ -13,6 +13,7 @@
     - configure
 
 - name: run configure for package $pkg
+  environment: $configure_env    
   autoconf: chdir=${pkg_build_dir} 
             configure=${pkg_source_dir}/configure
             creates=config.status
