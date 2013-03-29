@@ -1,0 +1,12 @@
+---
+- hosts: all
+  vars:
+    dotversion: 1.2.3
+    underversion: ${underversion_return.stdout}
+
+  tasks:
+
+    - local_action: shell echo $dotversion | tr '.' '_'
+      register: underversion_return
+
+    - debug: msg="dotversion=$dotversion underversion=$underversion"

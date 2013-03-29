@@ -1,0 +1,21 @@
+---
+- hosts: all
+  vars:
+    map1: 
+      a: 1
+      b: 2
+      c: 3
+
+    map2:
+      x: 10
+      y: 11
+      z: 12
+
+    bigmap:
+      << : *map1
+      << : map2
+
+    testenv: 
+      << : global_testenv
+      TEST_VARA: VALA
+      TEST_VARB: VALB

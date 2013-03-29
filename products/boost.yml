@@ -1,0 +1,32 @@
+---
+# Build boost
+
+- hosts: all
+
+  vars:
+    pkg: boost
+    srcdir: ${pkg}-${version}
+    boost_underscore_version: ${boost_underversion_return.stdout}
+    tarball: boost_${boost_underscore_version}.tar.gz
+    url: http://downloads.sourceforge.net/project/boost/boost/${version}/$tarball
+
+
+  tasks:
+
+    - local_action: shell echo $version | tr '.' '_'
+      register: boost_underversion_return
+      tags:
+        - download
+        - untar
+
+    - include: $top/tasks/directories.yml 
+
+    - include: $top/tasks/download.yml
+
+    - include: $top/tasks/untar.yml tar_opts=-xzf
+
+    - include: $top/tasks/configure.yml 
+
+    - include: $top/tasks/make.yml installs=something/in/boost/area
+
+  

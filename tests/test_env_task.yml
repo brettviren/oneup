@@ -1,0 +1,4 @@
+---
+
+- shell: /usr/bin/env | grep TEST_VAR
+  environment: $testenv

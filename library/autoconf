@@ -51,7 +51,7 @@ def main():
     quals = [x.strip().lower() for x in p['qualifiers'].split(",")]
     flags = []
     if 'debug' in quals: flags.append('-g') 
-    if 'opt' in quals: flags.append('-O')
+    if 'opt' in quals: flags.append('-O2')
     if flags:
         for var in ['CFLAGS','CXXFLAGS']:
             os.environ[var] = ' '.join(flags)

@@ -8,8 +8,13 @@
     srcdir: ${pkg}-${version}
     tarball: ${srcdir}.tar.bz2
     url: http://bugseng.com/products/ppl/download/ftp/releases/${version}/$tarball
+
     # override
     qualifiers: ""
+
+    # Override to place along with GCC
+    pkg_install_dir: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"gcc"})
+
 
   tasks:
     
@@ -22,7 +27,7 @@
     - include: $top/tasks/configure.yml 
       vars:
         gmp_prefix: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"gmp"})
-        opts: "--with-out-java --with-gmp=${gmp_prefix}"
+        configure_opts: "--with-out-java --with-gmp=${gmp_prefix}"
 
     - include: $top/tasks/make.yml installs=lib/libppl.a
 

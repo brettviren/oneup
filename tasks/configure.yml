@@ -16,7 +16,7 @@
   environment: $configure_env    
   autoconf: chdir=${pkg_build_dir} 
             configure=${pkg_source_dir}/configure
-            creates=config.status
+            creates=$configure_creates
             prefix=${pkg_install_dir}
             opts="$configure_opts"
             qualifiers=$qualifiers

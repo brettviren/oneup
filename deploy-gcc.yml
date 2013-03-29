@@ -1,0 +1,19 @@
+---
+
+# Top-level playbook which includes others needed to build GCC and
+# prerequisites
+
+- include: products/gmp.yml
+- include: products/ppl.yml
+- include: products/mpfr.yml
+- include: products/mpc.yml
+- include: products/isl.yml
+- include: products/cloog.yml
+- include: products/gcc.yml
+
+# not strictly gcc, but not considered an external.
+- include: products/cmake.yml
+
+
+  
+  

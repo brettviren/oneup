@@ -8,6 +8,12 @@
     tarball: ${srcdir}.tar.gz
     url: ftp://gcc.gnu.org/pub/gcc/infrastructure/$tarball
 
+    # override
+    qualifiers: ""
+
+    # Override to place along with GCC
+    pkg_install_dir: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"gcc"})
+
   tasks:
     
     - include: $top/tasks/directories.yml
@@ -18,9 +24,7 @@
 
     - include: $top/tasks/configure.yml 
       vars:
-        gmp_prefix: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"gmp"})
-        ppl_prefix: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"ppl"})
-        opts: "--with-gmp-dir=${gmp_prefix} --with-ppl=${ppl_prefix}"
+        configure_opts: "--with-gmp-dir=${pkg_install_dir} --with-ppl=${pkg_install_dir}"
 
     - include: $top/tasks/make.yml installs=libcloog.a
 

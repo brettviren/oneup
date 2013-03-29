@@ -9,6 +9,15 @@
 #
 # In addition, some variables are gathered as facts.
 
+# Set a list of qualifier words that will be interpreted at
+# configure/compile time in the group_vars or host_vars file.  Default
+# is the empty set.
+qualifiers: []
+
+# Set a variant label to go with the qualifiers.  This is tacked on to
+# the flavor in defining the install directory.
+variant: ""
+
 # A platform specific label.  This may be overridden in more specific
 # group_vars/* files.
 flavor: ${ansible_system}+${ansible_distribution}${ansible_distribution_version}
@@ -40,9 +49,6 @@ pkg_install_dir: $TEMPLATE($top/templates/pkg_install_dir.j2)
 
 # Set default values for task arguments
 
-# Set some number of qualifers in the group_vars or host_vars file 
-qualifiers: []
-
 # Set an environment dictionary for the configure.yml tasks
 configure_env: {}
 
@@ -51,6 +57,11 @@ make_env: {}
 
 # Used to set tar options
 tar_opts: ""
+
+configure_creates: config.status
+
+global_testenv: 
+  TEST_VARC: VALC
 
 
 

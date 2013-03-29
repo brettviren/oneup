@@ -11,6 +11,9 @@
     # override because gmp doesn't like having CFLAGS set
     qualifiers: ""
 
+    # Override to place along with GCC
+    pkg_install_dir: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"gcc"})
+
   tasks:
     
     - include: $top/tasks/directories.yml 

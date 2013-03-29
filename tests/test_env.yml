@@ -1,0 +1,26 @@
+---
+- hosts: all
+  vars:
+    pkg: tests
+    version: 0.0
+    gcc_dir: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"gcc"})
+    build_env_path: ${pkg_temp_dir}/build_env.sh
+
+    testenv: 
+      << : global_testenv
+      TEST_VARA: VALA
+      TEST_VARB: VALB
+
+  tasks:
+    
+    - file: path=${pkg_temp_dir} state=directory
+
+    - template: src=bash_env.sh.j2 dest=$build_env_path
+
+    - shell: echo $PATH executable=/bin/bash
+      environment:
+        BASH_ENV: $build_env_path
+
+    - script: /bin/echo $PATH executable=/bin/bash
+
+    - include: test_env_task.yml
