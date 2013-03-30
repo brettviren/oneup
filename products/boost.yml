@@ -5,9 +5,10 @@
 
   vars:
     pkg: boost
-    srcdir: ${pkg}-${version}
     boost_underscore_version: ${boost_underversion_return.stdout}
-    tarball: boost_${boost_underscore_version}.tar.gz
+    #srcdir: ${pkg}-${version}
+    srcdir: ${pkg}_${boost_underscore_version}
+    tarball: ${srcdir}.tar.gz
     url: http://downloads.sourceforge.net/project/boost/boost/${version}/$tarball
 
 
@@ -18,6 +19,7 @@
       tags:
         - download
         - untar
+        - configure
 
     - include: $top/tasks/directories.yml 
 
@@ -25,8 +27,25 @@
 
     - include: $top/tasks/untar.yml tar_opts=-xzf
 
-    - include: $top/tasks/configure.yml 
+    # according to the boost installation instructions we need to use
+    # cmake here if we don't use the system compiler
 
-    - include: $top/tasks/make.yml installs=something/in/boost/area
+    # boost does not use autoconf
+
+    - name: run a bootstrap script for package $pkg
+      command: ./bootstrap.sh --prefix=$pkg_install_dir --without-icu --without-libraries=python,mpi chdir=$pkg_source_dir creates=b2
+      when_set: $bootstrap
+      tags:
+        - configure
+
+
+    # boost doesn't use make
+
+    - name: build and install package $pkg
+      command: ./b2 install chdir=$pkg_source_dir creates=include/boost/any.hpp
+      tags:
+        - install
+
+#    - include: $top/tasks/make.yml installs=something/in/boost/area
 
   

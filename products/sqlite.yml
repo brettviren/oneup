@@ -1,0 +1,30 @@
+---
+# A playbook to build sqlite
+
+- hosts: all
+  vars:
+    pkg: sqlite
+    sqlite_version_nodots: ${sqlite_version_nodots_return.stdout}
+    srcdir: ${pkg}-autoconf-${sqlite_version_nodots}
+    tarball: ${srcdir}.tar.gz
+    url: http://www.sqlite.org/2013/${srcdir}.tar.gz
+
+  tasks:
+    
+    - local_action: shell echo $version | tr -d '.'
+      register: sqlite_version_nodots_return
+      tags:
+        - download
+        - untar
+        - configure
+
+    - include: $top/tasks/directories.yml
+
+    - include: $top/tasks/download.yml
+
+    - include: $top/tasks/untar.yml tar_opts=-xzf
+
+    - include: $top/tasks/configure.yml bootstrap=./autogen.sh
+
+    - include: $top/tasks/make.yml makes=sqlite3 installs=bin/sqlite3
+

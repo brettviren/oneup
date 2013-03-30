@@ -15,7 +15,8 @@
 qualifiers: []
 
 # Set a variant label to go with the qualifiers.  This is tacked on to
-# the flavor in defining the install directory.
+# the flavor in defining the install directory.  Qualifiers and
+# variant are ignored for compile tools (eg, gcc / cmake)
 variant: ""
 
 # A platform specific label.  This may be overridden in more specific
@@ -26,15 +27,12 @@ flavor: ${ansible_system}+${ansible_distribution}${ansible_distribution_version}
 version: ${products.${pkg}.version}
 
 # The full path to the current source tarball
-tar_file: ${source_cache}/${tarball}
+tar_file: ${tarball_cache}/${tarball}
+pkg_source_dir: ${source_cache}/${srcdir}
 
 # The temporary area where source is unpacked and package is built
 #pkg_temp_dir: "${build_base}/${pkg}/${version}/${flavor}"
 pkg_temp_dir: $TEMPLATE($top/templates/pkg_temp_dir.j2)
-
-# The unpacked source directory
-#pkg_source_dir: "${pkg_temp_dir}/${srcdir}"
-pkg_source_dir: $TEMPLATE($top/templates/pkg_source_dir.j2)
 
 # Directory in which to build the package
 #pkg_build_dir: "${pkg_temp_dir}/build"
@@ -49,19 +47,30 @@ pkg_install_dir: $TEMPLATE($top/templates/pkg_install_dir.j2)
 
 # Set default values for task arguments
 
-# Set an environment dictionary for the configure.yml tasks
-configure_env: {}
-
-# Set an environment dictionary for the make.yml tasks
-make_env: {}
-
 # Used to set tar options
 tar_opts: ""
 
 configure_creates: config.status
+configure_opts: ""
 
-global_testenv: 
-  TEST_VARC: VALC
+# provide default arguments to some tastsk.
+proxy_env: {}
+make_env: {}
+configure_env: {}
+
+make_target: ""
+
+### This is an attempt to turn on the version of GCC built herein when 
+### not using the system compiler.
+
+# Default GCC setup since we build our own
+# gcc_dir: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"gcc"})
+# gcc_env_script: ${gcc_dir}/build_env.sh
+# make_env: 
+#   BASH_ENV: ${gcc_env_script}
+# configure_env: 
+#   BASH_ENV: ${gcc_env_script}
+
 
 
 

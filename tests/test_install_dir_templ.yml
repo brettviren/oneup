@@ -1,0 +1,12 @@
+---
+- hosts: all
+  vars:
+    gcc_dir: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"gcc"})
+    cmake_dir: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"cmake"})
+    cppunit_dir: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"cppunit"})
+
+  tasks:
+
+    - debug: msg="gcc_dir = $gcc_dir"
+    - debug: msg="cmake_dir = $cmake_dir"
+    - debug: msg="cppunit_dir = $cppunit_dir"

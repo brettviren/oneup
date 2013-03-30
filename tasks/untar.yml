@@ -2,7 +2,7 @@
 # Un-tar a file
 
 - name: untar package $pkg with opts $tar_opts
-  command: tar ${tar_opts} ${tar_file} chdir=${pkg_temp_dir} creates=${pkg_source_dir}
+  command: tar ${tar_opts} ${tar_file} chdir=${source_cache} creates=${srcdir}
   when_set: ${products.${pkg}}
   tags:
     - untar

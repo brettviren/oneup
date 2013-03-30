@@ -1,0 +1,20 @@
+#!/bin/bash
+# This file is generated, edits may be lost
+# Set up environment for using this GCC as your compiler.
+
+gcc_prefix={{ gcc_dir }}
+export CC=${gcc_prefix}/bin/gcc
+export CXX=${gcc_prefix}/bin/g++
+
+export LD_LIBRARY_PATH=${gcc_prefix}/lib
+PATH=${gcc_prefix}/bin:$PATH
+
+export LIBRARY_PATH=${gcc_prefix}/lib/gcc/$(gcc -dumpmachine)/$(gcc -dumpversion)
+export COMPILER_PATH=${gcc_prefix}/bin:$PATH
+export C_INCLUDE_PATH=${gcc_prefix}/include
+export CPP_INCLUDE_PATH=${gcc_prefix}/include
+export CPATH=${gcc_prefix}/include
+
+
+echo "Using GCC: ${CC} from PATH=${PATH}"
+

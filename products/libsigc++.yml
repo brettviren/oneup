@@ -1,0 +1,18 @@
+---
+- hosts: all
+  vars:
+    pkg: libsigc++
+    srcdir: ${pkg}-${version}
+    tarball: ${srcdir}.tar.bz2
+    url: http://ftp.gnome.org/pub/GNOME/sources/libsigc++/2.2/$tarball
+  tasks:
+    
+    - include: $top/tasks/directories.yml
+
+    - include: $top/tasks/download.yml
+
+    - include: $top/tasks/untar.yml tar_opts=-xjf
+
+    - include: $top/tasks/configure.yml
+
+    - include: $top/tasks/make.yml installs=include

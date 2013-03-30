@@ -7,7 +7,7 @@
     - install
 
 - name: Run the make command in the build directory of package ${pkg}
-  command: make chdir="${pkg_build_dir}" creates="${pkg_build_dir}/${makes}"
+  command: make $make_target chdir="${pkg_build_dir}" creates="${pkg_build_dir}/${makes}"
   environment: $make_env    
   when_set: $makes
   tags:
@@ -15,7 +15,7 @@
 
 - name: Run the make install command in the build directory of package ${pkg}
   command: make install chdir="${pkg_build_dir}" creates="${pkg_install_dir}/${installs}"
-  when_set: $installs
   environment: $make_env    
+  when_set: $installs
   tags:
     - install

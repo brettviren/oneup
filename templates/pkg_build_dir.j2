@@ -1,1 +1,1 @@
-{{ build_base }}/{{ pkg }}/{{ version }}/{{ flavor }}/build
+{{ build_base }}/{{ pkg }}/{{ version }}/{{ flavor }}{%- if pkg not in ['gcc', 'cmake'] -%}{{ variant }}{% endif %}

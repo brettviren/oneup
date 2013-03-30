@@ -10,4 +10,12 @@
   tags:
     - directories
 
-  
+- file: state=directory path=$tarball_cache
+  when_set: $tarball_cache
+  tags:
+    - directories
+
+- file: state=directory path=$source_cache
+  when_set: $source_cache
+  tags:
+    - directories

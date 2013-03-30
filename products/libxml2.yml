@@ -1,0 +1,22 @@
+---
+# A playbook to build cppunit
+
+- hosts: all
+  vars:
+    pkg: libxml2
+    srcdir: ${pkg}-${version}
+    tarball: ${srcdir}.tar.gz
+    url: ftp://xmlsoft.org/${pkg}/$tarball
+
+  tasks:
+    
+    - include: $top/tasks/directories.yml
+
+    - include: $top/tasks/download.yml
+
+    - include: $top/tasks/untar.yml tar_opts=-xzf
+
+    - include: $top/tasks/configure.yml
+
+    - include: $top/tasks/make.yml makes=.libs/libxml2.a installs=lib/libxml2.a
+

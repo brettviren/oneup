@@ -2,7 +2,13 @@
 # Tasks to run autoconf's configure and maybe first a bootrap script to make it.
 
 - name: chirp configure
-  debug: msg="configure $pkg in $pkg_build_dir with $configure_opts in $pkg_source_dir and $qualifiers"
+  debug: msg="configure package=$pkg in environment=$configure_env with opts=$configure_opts and with qualifiers=$qualifiers"
+  tags:
+    - configure
+
+- name: check configure environment
+  command: /usr/bin/env
+  environment: $configure_env    
   tags:
     - configure
 

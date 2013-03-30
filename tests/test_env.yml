@@ -7,7 +7,6 @@
     build_env_path: ${pkg_temp_dir}/build_env.sh
 
     testenv: 
-      << : global_testenv
       TEST_VARA: VALA
       TEST_VARB: VALB
 

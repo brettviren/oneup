@@ -1,0 +1,26 @@
+---
+- hosts: all
+  vars:
+    pkg: tbb
+    srcdir: ${pkg}${version}
+    tarball: ${srcdir}_src.tgz
+    url: http://threadingbuildingblocks.org/sites/default/files/software_releases/source/$tarball
+
+  tasks:
+
+    - include: $top/tasks/directories.yml
+
+    - file: state=directory path=${pkg_install_dir}/lib
+      when_set: $pkg_install_dir
+      tags:
+        - directories
+
+    - include: $top/tasks/download.yml
+      
+    - include: $top/tasks/untar.yml tar_opts=-xzf
+
+    - shell: cp -a $srcdir/* $pkg_build_dir chdir=$source_cache creates=$pkg_build_dir/Makefile
+
+    - shell: make && touch crappy-build-system chdir=$pkg_build_dir creates=crappy-build-system
+
+    - shell: cp ${pkg_build_dir}/build/*_release/lib* ${pkg_install_dir}/lib/ creates=${pkg_install_dir}/lib/libtbb.so

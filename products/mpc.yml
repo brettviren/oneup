@@ -8,11 +8,13 @@
     tarball: ${srcdir}.tar.gz
     url: http://www.multiprecision.org/mpc/download/${tarball}
 
-    # override
-    qualifiers: ""
-
     # Override to place along with GCC
     pkg_install_dir: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"gcc"})
+
+    # null this out so configure uses defaults
+    qualifiers: ""
+    configure_env: ""
+    make_env: ""
 
   tasks:
     

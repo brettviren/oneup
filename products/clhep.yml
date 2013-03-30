@@ -1,0 +1,24 @@
+---
+# A playbook to build clhep
+
+- hosts: all
+  vars:
+    pkg: clhep
+    srcdir: ${pkg}-${version}
+    tarball: ${srcdir}.tgz
+    url: http://wwwasd.web.cern.ch/wwwasd/lhc++/clhep/DISTRIBUTION/tarFiles/$tarball
+
+  tasks:
+    
+    - include: $top/tasks/directories.yml
+
+    - include: $top/tasks/download.yml
+
+    - include: $top/tasks/untar.yml tar_opts=-xzf
+    - command: mv $version/CLHEP $srcdir chdir=${source_cache} creates=${srcdir}
+    - file: path=$version chdir=${source_cache} state=absent
+
+    - include: $top/tasks/cmake.yml configure_creates=Makefile
+
+    - include: $top/tasks/make.yml makes=bin/clhep installs=bin/clhep
+

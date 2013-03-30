@@ -2,3 +2,16 @@ oneup - Online Networked Environment for Unix Products.
 
 Really this is just some [[http://ansible.cc][Ansible]] files for installing packages from
 source in a manner that is compatible with [[http://www.fnal.gov/docs/products/ups/][UPS]].
+
+High-level configuration is in a =host_vars/<host>= file.  Each "host"
+defines a list of packages to build and their versions.  It defines a
+platform "flavor" label to use that describes the build host.  It can
+also define some special keyword qualifiers that may influence the
+build and a "variant" label used with the flavor to produce a uniquely
+named install directory.  You can also set:
+
+ - real name for build host
+ - base source cache, temp build and install directories
+ - the =proxy_env= variable if HTTP proxy is required from build host
+ - any build qualifiers and a corresponding variant name
+ - the =products= list giving packages and versions

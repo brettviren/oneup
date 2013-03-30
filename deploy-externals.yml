@@ -1,4 +1,15 @@
 ---
 # External packages
 
-- include: products/cppunit
+- include: products/cmake.yml
+- include: products/cppunit.yml
+- include: products/boost.yml
+- include: products/python.yml 
+- include: products/fftw.yml
+- include: products/libsigc++.yml
+- include: products/gccxml.yml
+- include: products/clhep.yml
+- include: products/sqlite.yml
+# - include: products/libxml2.yml
+# - include: products/tbb.yml
+

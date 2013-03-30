@@ -1,0 +1,6 @@
+---
+
+- command: cmake $pkg_source_dir $configure_opts '-DCMAKE_INSTALL_PREFIX:PATH=$pkg_install_dir'
+           chdir=$pkg_build_dir creates=$configure_creates
+  tags:
+    - configure

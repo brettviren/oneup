@@ -11,10 +11,6 @@
     # note: short version string is hard coded!
     url: http://www.cmake.org/files/v2.8/$tarball
 
-    # override because gmp doesn't like having CFLAGS set
-    qualifiers: ""
-
-
   tasks:
     
     - include: $top/tasks/directories.yml 

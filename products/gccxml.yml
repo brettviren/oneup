@@ -1,0 +1,30 @@
+---
+# A playbook to build gccxml
+
+- hosts: all
+  vars:
+    pkg: gccxml
+    srcdir: ${pkg}-${version}
+    tarball: ${srcdir}.tar.gz
+    url: git://github.com/gccxml/gccxml.git
+
+  tasks:
+    
+    - include: $top/tasks/directories.yml
+
+    - name: clone $pkg from git at $url
+      command: git clone $url chdir=${source_cache} creates=gccxml
+      tags:
+        - download
+
+    - name: interpret version as date string to make a tar ball
+      shell: git archive -o $tar_file --format=tgz --prefix=${srcdir}/ $(git rev-list --date=short --since="2012-07-02" master |tail -1) chdir=${source_cache}/gccxml creates=$tar_file
+      tags:
+        - download
+
+    - include: $top/tasks/untar.yml tar_opts=-xzf
+
+    - include: $top/tasks/cmake.yml configure_creates=Makefile
+
+    - include: $top/tasks/make.yml makes=bin/gccxml installs=bin/gccxml
+

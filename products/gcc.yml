@@ -8,6 +8,7 @@
     tarball: ${srcdir}.tar.bz2
     url: http://www.netgull.com/gcc/releases/${srcdir}/${tarball}
 
+    configure_env: ""
     make_env:
       LD_LIBRARY_PATH: ${pkg_install_dir}/lib
       LIBRARY_PATH: "/usr/lib/${gccma.stdout}"
@@ -15,7 +16,7 @@
       CPLUS_INCLUDE_PATH: "/usr/include/${gccma.stdout}"
       CPATH: "/usr/include/${gccma.stdout}"
 
-    # override because gmp doesn't like having CFLAGS set
+    # null this out so configure uses defaults
     qualifiers: ""
 
   tasks:

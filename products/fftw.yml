@@ -1,0 +1,18 @@
+---
+- hosts: all
+  vars:
+    pkg: fftw
+    srcdir: ${pkg}-${version}
+    tarball: ${srcdir}.tar.gz
+    url: http://www.fftw.org/${tarball}
+  tasks:
+    
+    - include: $top/tasks/directories.yml
+
+    - include: $top/tasks/download.yml
+
+    - include: $top/tasks/untar.yml tar_opts=-xzf
+
+    - include: $top/tasks/configure.yml
+
+    - include: $top/tasks/make.yml installs=lib/libfftw3.a
