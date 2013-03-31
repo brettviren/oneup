@@ -1,0 +1,44 @@
+---
+# A playbook to build genie
+
+- hosts: all
+  vars:
+    pkg: Genie
+    srcdir: Genie-${version}
+    tarball: ${srcdir}.tar.gz
+    url: http://www.hepforge.org/archive/genie/$tarball
+
+    lhapdf_dir: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"lhapdf"})
+    libxml2_dir: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"libxml2"})
+    log4cpp_dir: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"log4cpp"})
+    pythia_dir: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"pythia"})
+    root_dir: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"root"})
+
+    configure_env:
+      GENIE: $pkg_build_dir
+      ROOTSYS: ${root_dir}
+      PATH: /usr/local/bin:/usr/bin:/bin:${root_dir}/bin
+      LD_LIBRARY_PATH: ${root_dir}/lib
+
+    make_env: $configure_env
+
+    configure_creates: $pkg_build_dir/src/make/Make.config
+
+    configure_opts: "--with-libxml2-lib=${libxml2_dir}/lib --with-libxml2-inc=${libxml2_dir}/include --with-lhapdf-lib=${lhapdf_dir}/lib --with-lhapdf-inc=${lhapdf_dir}/include --with-log4cpp-lib=${log4cpp_dir}/lib --with-log4cpp-inc=${log4cpp_dir}/include --with-pythia6-lib=${pythia_dir}/lib --enable-numi --enable-atmo --enable-t2k --enable-nucleon-decay"
+
+  tasks:
+    
+    - include: $top/tasks/directories.yml
+
+    - include: $top/tasks/download.yml
+
+    - include: $top/tasks/untar.yml tar_opts=-xzf 
+      
+    - shell: cp -a * $pkg_build_dir
+             chdir=$source_cache/$srcdir/
+             creates=$pkg_build_dir/Makefile
+
+    - include: $top/tasks/configure.yml 
+
+    - include: $top/tasks/make.yml makes=bin/genie installs=bin/genie
+

@@ -1,0 +1,51 @@
+---
+- hosts: all
+
+  vars:
+    pkg: art_suite
+    art_suite_underscore_version: ${art_suite_underversion_return.stdout}
+    srcdir: ${pkg}-${version}-source
+    tarball: $srcdir.tar.bz2
+    url: http://oink.fnal.gov/distro/art/$tarball
+    cbt_verdir: v3_03_05    
+
+
+    # This sucks
+    configure_env:
+      PATH: /usr/local/bin:/usr/bin:/bin:${pkg_source_dir}/source/cetbuildtools/cetbuildtools/bin
+
+  tasks:
+
+    - local_action: shell echo $version | tr '.' '_'
+      register: art_suite_underversion_return
+      tags:
+        - download
+        - untar
+        - configure
+
+    - include: $top/tasks/directories.yml
+
+    - include: $top/tasks/download.yml
+
+    - include: $top/tasks/untar.yml tar_opts=-xjf
+
+    - shell: mv ${pkg}/v${art_suite_underscore_version} $srcdir
+             chdir=$source_cache
+             creates=$srcdir
+      register: result
+
+    - file: path=${source_cache}/$pkg state=absent
+
+    # make one version of cetbuildtools look like a normal package
+    - file: src=${pkg_source_dir}/source/cetbuildtools/${cbt_verdir} 
+            dest=${pkg_source_dir}/source/cetbuildtools/cetbuildtools 
+            state=link
+
+    - include: $top/tasks/art_build.yml art_pkg=$item
+      with_items:
+        - cetbuildtools
+        - cpp0x
+        - cetlib
+        - fhicl-cpp
+        - messagefacility
+

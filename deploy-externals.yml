@@ -10,6 +10,6 @@
 - include: products/gccxml.yml
 - include: products/clhep.yml
 - include: products/sqlite.yml
-# - include: products/libxml2.yml
-# - include: products/tbb.yml
+- include: products/libxml2.yml
+- include: products/tbb.yml
 

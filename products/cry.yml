@@ -1,0 +1,41 @@
+---
+# A playbook to build cppunit
+
+- hosts: all
+  vars:
+    pkg: cry
+    srcdir: ${pkg}_v${version}
+    tarball: ${srcdir}.tar.gz
+    url: http://nuclear.llnl.gov/simulation/$tarball
+    make_env:
+      CRYHOME: $pkg_build_dir
+      CRYDATAPATH: $pkg_build_dir/data
+
+  tasks:
+    
+    - include: $top/tasks/directories.yml
+
+    - file: state=directory path=${pkg_install_dir}/lib
+      when_set: $pkg_install_dir
+      tags:
+        - directories
+
+    - include: $top/tasks/download.yml
+
+    - include: $top/tasks/untar.yml tar_opts=-xzf
+
+    - shell: cp -a $srcdir/* $pkg_build_dir chdir=$source_cache creates=$pkg_build_dir/Makefile
+      tags:
+        - untar
+
+    - include: $top/tasks/make.yml makes=lib/libCRY.a
+
+    - shell: g++ -shared -o lib/libCRY.so src/*.o 
+             chdir=$pkg_build_dir creates=lib/libCRY.so
+
+    - shell: cp ${pkg_build_dir}/lib/libCRY.so lib/libCRY.so 
+             chdir=${pkg_install_dir} creates=lib/libCRY.so
+
+
+
+

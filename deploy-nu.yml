@@ -1,0 +1,17 @@
+---
+# Neutrino experiment externals
+
+- include: products/xerces-c.yml
+- include: products/cry.yml
+- include: products/cstxsd.yml
+# - include: products/lhapdf.yml
+# - include: products/pdfsets.yml
+# - include: products/pythia.yml
+# - include: products/log4cpp.yml
+# - include: products/mysql_client.yml
+# - include: products/postgresql.yml
+# - include: products/geant4.yml
+# - include: products/root.yml
+# - include: products/genie.yml
+
+

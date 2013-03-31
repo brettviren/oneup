@@ -1,0 +1,47 @@
+---
+# Build XSD suite from mega bundle
+
+- hosts: all
+  vars:
+    pkg: xsd
+    srcdir: ${pkg}-${version}
+    tarball: ${srcdir}.tar.bz2
+    url: http://www.codesynthesis.com/download/xsd/3.3/${srcdir}.tar.bz2
+
+    boost_dir: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"boost"})
+    xerces_c_dir: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"xerces-c"})
+
+    make_env:
+      CXXFLAGS: "-O3 -I${boost_dir}/include -I${xerces_c_dir}/include" 
+      CPPFLAGS: "-I${boost_dir}/include -I${xerces_c_dir}/include" 
+      LDFLAGS: "-L${boost_dir}/lib -L${xerces_c_dir}/lib"
+
+    patch_file: ${srcdir}.patch
+
+  tasks:
+    
+    - include: $top/tasks/directories.yml
+
+    - include: $top/tasks/download.yml
+
+    - copy: src=$top/patches/${patch_file} dest=$pkg_build_dir/${patch_file}
+      when_set: $patch_file
+
+    - include: $top/tasks/untar.yml tar_opts=-xjf source_cache=$pkg_build_dir
+
+    - shell: patch -p2 < ../${srcdir}.patch > ../${srcdir}.patch.applied
+             chdir=$pkg_build_dir/${srcdir}/
+             creates=../${srcdir}.patch.applied
+
+    - shell: make chdir=$pkg_build_dir/$srcdir
+      environment: $make_env
+      tags:
+        - install
+
+
+    - shell: make install_prefix=${pkg_install_dir} install 
+             chdir=$pkg_build_dir/$srcdir
+      environment: $make_env
+      tags:
+        - install
+

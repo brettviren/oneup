@@ -1,0 +1,22 @@
+---
+# A playbook to build cppunit
+
+- hosts: all
+  vars:
+    pkg: xerces-c
+    srcdir: ${pkg}-${version}
+    tarball: ${srcdir}.tar.gz
+    url: http://mirror.metrocast.net/apache//xerces/c/3/sources/$tarball
+
+  tasks:
+    
+    - include: $top/tasks/directories.yml
+
+    - include: $top/tasks/download.yml
+
+    - include: $top/tasks/untar.yml tar_opts=-xzf
+
+    - include: $top/tasks/configure.yml bootstrap=./autogen.sh
+
+    - include: $top/tasks/make.yml installs=lib/libcppunit.a
+

@@ -1,0 +1,26 @@
+---
+# A playbook to build mysql
+
+- hosts: all
+  vars:
+    pkg: mysql
+    srcdir: ${pkg}-${version}
+    tarball: ${srcdir}.tar.gz
+    # screw you, oracle
+    url: http://www.mysql.com/get/Downloads/MySQL-5.5/${tarball}/from/http://cdn.mysql.com/
+
+  tasks:
+    
+    - include: $top/tasks/directories.yml
+
+    - include: $top/tasks/download.yml
+
+    - include: $top/tasks/untar.yml tar_opts=-xzf
+
+    - include: $top/tasks/cmake.yml configure_creates=Makefile
+
+    - include: $top/tasks/make.yml makes=install_manifest.txt installs=bin/mysql
+
+
+
+

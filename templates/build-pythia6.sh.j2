@@ -1,0 +1,19 @@
+#!/bin/bash
+
+build_pythia6 () {
+
+    local flags="-c -fPIC"
+    local archflags=""		# maybe -m64
+
+    echo 'void MAIN__() {}' >main.c
+
+    gfortran $flags $archflags pythia*.f
+    gfortran $flags $archflags -fno-second-underscore tpythia6_called_from_cc.F
+    gcc $flags $archflags main.c
+    gcc $flags $archflags pythia6_common_address.c
+    gfortran $archflags -shared -Wl,-soname,libPythia6.so -o libPythia6.so \
+                         main.o  pythia*.o tpythia*.o
+
+}
+
+build_pythia6

@@ -1,0 +1,32 @@
+---
+
+- hosts: all
+  vars:
+    pkg: pythia
+    srcdir: ${pkg}${version}
+    tarball: ${srcdir}.tar.gz
+    url: ftp://root.cern.ch/root/$tarball
+
+  tasks:
+    
+    - include: $top/tasks/directories.yml
+    - file: state=directory path=$pkg_install_dir/lib
+      tags:
+        - directories
+
+    - include: $top/tasks/download.yml
+
+    - include: $top/tasks/untar.yml tar_opts=-xzf
+               source_cache=$pkg_build_dir
+
+    - template: src=$top/templates/build-pythia6.sh.j2 
+                dest=$pkg_build_dir/build-pythia6.sh
+                mode=0755 
+
+    - shell: ../build-pythia6.sh 
+             chdir=${pkg_build_dir}/${srcdir}
+             creates=libPythia6.so
+
+    - shell: cp libPythia6.so ${pkg_install_dir}/lib             
+             chdir=${pkg_build_dir}/${srcdir}
+             creates=${pkg_install_dir}/lib/libPythia6.so

@@ -2,16 +2,26 @@
 # A playbook to build ROOT
 
 - hosts: all
-  gather_facts: no
   vars:
-    version: ${products.root.version}
-    srcdir: root
-    tarball: root_v${version}.source.tar.gz
+    pkg: root
+    srcdir: ${pkg}_v${version}.source
+    tarball: ${srcdir}.tar.gz
     url: ftp://root.cern.ch/root/${tarball}
+    configure_opts: -Dgdml=ON -Dc++11=ON
 
   tasks:
     
-    - include: download.yml pkg=root
+    - include: $top/tasks/directories.yml
 
+    - include: $top/tasks/download.yml
 
+    - include: $top/tasks/untar.yml tar_opts=-xzf
+
+    - shell: test -d $pkg && mv $pkg $srcdir
+             chdir=$source_cache
+             creates=$srcdir
+
+    - include: $top/tasks/cmake.yml configure_creates=Makefile
+
+    - include: $top/tasks/make.yml makes=install_manifest.txt installs=bin/root-config
 

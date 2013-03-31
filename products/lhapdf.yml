@@ -1,0 +1,21 @@
+---
+# A playbook to build cppunit
+
+- hosts: all
+  vars:
+    pkg: lhapdf
+    srcdir: ${pkg}-${version}
+    tarball: ${srcdir}.tar.gz
+    url: http://www.hepforge.org/archive/lhapdf/$tarball
+  tasks:
+    
+    - include: $top/tasks/directories.yml
+
+    - include: $top/tasks/download.yml
+
+    - include: $top/tasks/untar.yml tar_opts=-xzf
+
+    - include: $top/tasks/configure.yml
+
+    - include: $top/tasks/make.yml makes=lib/.libs/libLHAPDF.a installs=lib/libLHAPDF.a
+

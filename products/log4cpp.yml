@@ -1,0 +1,25 @@
+---
+# A playbook to build log4cpp
+
+- hosts: all
+  vars:
+    pkg: log4cpp
+    srcdir: ${pkg}
+    tarball: ${pkg}-${version}.tar.gz
+    # sf.net has really annoying download behavior
+    url: http://downloads.sourceforge.net/project/log4cpp/${pkg}-${version}.x%20%28new%29/${pkg}-${version}/${tarball}
+
+  tasks:
+    
+    - include: $top/tasks/directories.yml
+
+    - include: $top/tasks/download.yml
+
+    - include: $top/tasks/untar.yml tar_opts=-xzf
+
+    - include: $top/tasks/configure.yml
+
+    - include: $top/tasks/make.yml installs=lib/liblog4cpp.so
+
+
+

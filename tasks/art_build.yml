@@ -1,0 +1,28 @@
+---
+# Build an art_suite package with cmake+make+make install
+
+- file: path=$pkg_build_dir/${art_pkg} state=directory
+
+- command: cmake $pkg_source_dir/source/${art_pkg}/${art_pkg}
+           -DCMAKE_INSTALL_PREFIX:PATH=$pkg_install_dir
+           -DCMAKE_BUILD_TYPE=Debug -Dqualifier:STRING=debug
+           -Dproduct=${art_pkg} -Dversion=${version}
+           chdir=$pkg_build_dir/${art_pkg} creates=Makefile
+  environment: $configure_env
+  tags:
+    - configure
+
+
+- command: make chdir=${pkg_build_dir}/${art_pkg} creates=install_manifest.txt
+  tags:
+    - install
+
+- command: make test chdir=${pkg_build_dir}/${art_pkg} creates=testing_output
+  ignore_errors: yes
+  tags:
+    - install
+
+- command: make install chdir=${pkg_build_dir}/${art_pkg} creates=${pkg_install_dir}/$art_pkg/${version}
+  tags:
+    - install
+

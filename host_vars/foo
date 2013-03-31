@@ -79,3 +79,44 @@ products:
   tbb:
     version: 41_20130314oss
 
+  xerces-c:
+    version: 3.1.1
+
+  cry:
+    version: 1.7
+
+  xsd:
+    version: 3.3.0-1+dep
+
+  lhapdf:
+    version: 5.8.8
+
+  pdfsets:
+    version: 5.8.8
+
+  pythia:
+    version: 6
+#    version: 6.4.26
+
+  log4cpp:
+    version: 1.1
+
+  mysql:
+    version: 5.5.30
+
+  postgresql:
+    version: 9.1.5
+
+  geant:
+    version: 4.9.6.p01
+
+  root:
+    version: 5.34.05
+
+  # capitalize!
+  Genie:
+    version: 2.8.0
+
+
+  art_suite:
+    version: 1.03.08

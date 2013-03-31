@@ -1,21 +1,25 @@
 ---
 
-- file: state=directory path=$pkg_build_dir
+- name: assure build directory for package $pkg
+  file: state=directory path=$pkg_build_dir
   when_set: $pkg_build_dir
   tags:
     - directories
 
-- file: state=directory path=$pkg_install_dir
+- name: assure install directory for package $pkg
+  file: state=directory path=$pkg_install_dir
   when_set: $pkg_install_dir
   tags:
     - directories
 
-- file: state=directory path=$tarball_cache
+- name: assure tarball_cache
+  file: state=directory path=$tarball_cache
   when_set: $tarball_cache
   tags:
     - directories
 
-- file: state=directory path=$source_cache
+- name: assure source_cache
+  file: state=directory path=$source_cache
   when_set: $source_cache
   tags:
     - directories

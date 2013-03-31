@@ -1,0 +1,85 @@
+---
+# This one is ugly.
+#
+# xsd requires a crap load (metric) of other packages and its own build system.
+# 
+# 
+# build >= 0.3.2
+# libcult >= 1.4.6
+# libfrontend-elements >= 1.1.4
+# libbackend-elements >= 1.7.2
+# libxsd-frontend >= 1.17.0
+
+- hosts: all
+  vars:
+    pkg: cstxsd
+
+    xsd_build_url: 'http://codesynthesis.com/download/build/0.3'
+    xsd_build_sd: 'build-${products.xsd_build.version}'
+
+    libcult_url: 'ftp://kolpackov.net/pub/projects/libcult/1.4'
+    libcult_sd: 'libcult-${products.libcult.version}'
+
+    libfrontend_elements_url: 'ftp://kolpackov.net/pub/projects/libfrontend-elements/1.1'
+    libfrontend_elements_sd: 'libfrontend-elements-${products.libfrontend_elements.version}'
+
+    libbackend_elements_url: 'ftp://kolpackov.net/pub/projects/libbackend-elements/1.7'
+    libbackend_elements_sd: 'libbackend-elements-${products.libbackend_elements.version}'
+
+    libxsd_frontend_url: 'http://www.codesynthesis.com/download/libxsd-frontend/1.17'
+    libxsd_frontend_sd: 'libxsd-frontend-${libxsd_frontend}'
+
+    xsd_url: 'http://www.codesynthesis.com/download/xsd/3.3'
+    xsd_sd: 'xsd-${products.xsd.version}'
+
+    xsd_pkgs:
+      - xsd_build
+      - libcult
+      - libfrontend_elements
+      - libbackend_elements
+      - xsd
+
+    boost_dir: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"boost"})
+    xerces_c_dir: $TEMPLATE($top/templates/pkg_install_dir.j2 {"pkg":"xerces-c"})
+
+    make_env:
+      CXXFLAGS: "-O3 -I${boost_dir}/include -I${xerces_c_dir}/include" 
+      CPPFLAGS: "-I${boost_dir}/include -I${xerces_c_dir}/include" 
+      LDFLAGS: "-L${boost_dir}/lib -L${xerces_c_dir}/lib"
+      MAKEFLAGS: "-I ${pkg_build_dir}/include"
+  tasks:
+    - include: $top/tasks/directories.yml
+      
+    - file: state=directory path=${pkg_install_dir}/lib
+      when_set: $pkg_install_dir
+      tags:
+        - directories
+
+    - name: download source package $item
+      get_url: dest="$tarball_cache/${${item}_sd}.tar.bz2" url="${${item}_url}/${${item}_sd}.tar.bz2"
+      environment: $proxy_env
+      with_items: $xsd_pkgs
+      tags:
+        - download
+
+    - command: tar -xjf "$tarball_cache/${${item}_sd}.tar.bz2" 
+               chdir=${source_cache} creates=${${item}_sd}
+      with_items: $xsd_pkgs
+      tags:
+        - untar
+
+    - shell: make -f ${source_cache}/${${item}_sd}/makefile 
+             chdir=$pkg_build_dir 
+      with_items: $xsd_pkgs
+      environment: $make_env
+      tags:
+        - install
+
+
+    - shell: make -f ${source_cache}/${${item}_sd}/makefile install_prefix=$pkg_build_dir install
+             chdir=$pkg_build_dir 
+      with_items: $xsd_pkgs
+      environment: $make_env
+      tags:
+        - install
+
